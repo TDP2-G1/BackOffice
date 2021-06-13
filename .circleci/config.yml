@@ -1,0 +1,54 @@
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: backoffice/tdp2-backoffice      
+
+    docker:
+      - image: circleci/node:12
+jobs:
+  build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          
+          command: |
+            docker build -t $IMAGE_NAME:latest .
+  deploy:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies- # fallback to using the latest cache if no exact match is found
+      - run:
+          name: "Install Heroku CLI, if necessary"
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+              curl https://cli-assets.heroku.com/install.sh | sh
+            else
+              echo "Heroku is already installed. No operation was performed."
+            fi
+      - run:
+          name: Login into Heroku Docker Repository
+          command: |
+            docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+      - run:
+          name: Deploy Heroku Docker Container
+          command: |
+            heroku container:push web -a tdp2-backoffice
+            heroku container:release web -a tdp2-backoffice
+workflows:
+  node-tests:
+    jobs:
+      - node/test
+      - build
+      - deploy
