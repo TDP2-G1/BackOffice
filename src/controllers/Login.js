@@ -64,7 +64,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Inicia sesión en GetFluent
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -73,7 +73,7 @@ function SignIn(props) {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             onChange={changeHandler}
@@ -102,15 +102,15 @@ function SignIn(props) {
             className={classes.submit}
             onClick={submitHandler}
           >
-            Sign In
+            Entrar
           </Button>
-          <Grid container>            
+          {/* <Grid container>            
             <Grid item>
               <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
       <Box mt={8}>
