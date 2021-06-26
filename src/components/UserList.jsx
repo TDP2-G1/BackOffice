@@ -189,7 +189,8 @@ class UserList extends React.Component {
   }
 
   showOnList = (user) => {    
-    let passTopicCheck = this.state.topicsSearchText === '' ? true : user.topics_descriptions.toLowerCase().includes(this.state.topicsSearchText.toLowerCase()) ? true: false;
+    let passTopicCheck = this.state.topicsSearchText === '' ? true : 
+    (user.topics_descriptions.toLowerCase().includes(this.state.topicsSearchText.toLowerCase()) || user.first_name.toLowerCase().includes(this.state.topicsSearchText.toLowerCase()) || user.last_name.toLowerCase().includes(this.state.topicsSearchText.toLowerCase())) ? true: false;
     let passAccessCheck = this.state.showWithAccess && this.state.showWithoutAccess
     if(!passAccessCheck){
       passAccessCheck = this.state.showWithAccess ? user.is_disabled === false : user.is_disabled === true;
