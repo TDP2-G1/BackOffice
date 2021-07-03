@@ -75,6 +75,7 @@ function SignIn(props) {
             id="email"
             label="Email"
             name="email"
+            inputProps={{ maxLength: 100 }}
             autoComplete="email"
             onChange={changeHandler}
             autoFocus
@@ -84,6 +85,7 @@ function SignIn(props) {
             margin="normal"
             required
             fullWidth
+            inputProps={{ maxLength: 100 }}
             name="password"
             label="Password"
             type="password"
@@ -101,6 +103,7 @@ function SignIn(props) {
             color="primary"
             className={classes.submit}
             onClick={submitHandler}
+            disabled={props.value && (props.value.email && props.value.password) ? null : true}
           >
             Entrar
           </Button>
@@ -128,8 +131,6 @@ export class Login extends Component {
             formData: {
                 email: '',
                 password: '',
-                google_token: '',
-                user_type: 'admin',
             },
             errorMessage: ''
         };
@@ -141,7 +142,7 @@ export class Login extends Component {
 
     render() {
         return (
-            <SignIn handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange} errorMessage={this.state.errorMessage}></SignIn>
+            <SignIn handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange} errorMessage={this.state.errorMessage} value={this.state.formData}></SignIn>
         )
     }
 
@@ -154,10 +155,11 @@ export class Login extends Component {
 
     handleApiResponse(response) {
         if (response.hasError()) {
-            this.setState({errorMessage: response.errorMessages()});
+            //this.setState({errorMessage: response.errorMessages()});
+            this.setState({errorMessage: 'Email o contraseña inválidos'});
         } else {
             app.loginUser(response.content().token);
-            this.props.history.push(app.routes().home);
+            this.props.history.push(app.routes().userlist);
         }
     }
 

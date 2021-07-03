@@ -10,8 +10,8 @@ class Routes extends Component {
         return (
             <Router key="router">
                 {/* TODO: Login aca tambien */}
-                <Route exact path={app.routes().login} render={props => localStorage.getItem("token") ?
-                    <Redirect to={{pathname: app.routes().home}}/> :
+                <Route exact={localStorage.getItem("token") ? true : false} path={localStorage.getItem("token") ? app.routes().login : '/'} render={props => localStorage.getItem("token") ?
+                    <Redirect to={{pathname: app.routes().userlist}}/> :
                     <Login {...props}/>
                 }/>           
                 <PrivateRoute exact path={app.routes().userlist} component={Users}/>
