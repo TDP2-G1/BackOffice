@@ -8,7 +8,7 @@ export class ApiResponse {
     }
 
     hasError() {
-        return this._jsonResponse.error !== undefined && this._jsonResponse.error !== false;
+        return this._jsonResponse.Error !== undefined && this._jsonResponse.error !== false;
     }
 
     errors() {

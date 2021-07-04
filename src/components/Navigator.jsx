@@ -17,14 +17,20 @@ import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Receipt, People, Computer, Report, Money } from '@material-ui/icons';
+import { Receipt, People, Computer, Report, Money, MeetingRoom } from '@material-ui/icons';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 
 const categories = [
   {
     id: 'Usuarios',
     children: [      
-      { id: 'Listado de usuarios', icon: <People />, route: '/' },
+      { id: 'Listado de usuarios', icon: <People />, route: '/users' },
+    ],
+  },
+  {
+    id: 'Admin',
+    children: [      
+      { id: 'Cerrar sesión', icon: <MeetingRoom />, route: '/sign-out' },
     ],
   },
 ];
@@ -74,9 +80,15 @@ function Navigator(props) {
   const { classes, selectedRoute, history, ...other } = props;
 
   const navigate = (route, isSelectedRoute) =>{
-    if(!isSelectedRoute){
-      history.push('/' + route)
-    }    
+
+    if(route == '/sign-out'){
+      localStorage.removeItem('token')
+      history.push('/')
+    }else{
+      if(!isSelectedRoute){
+        history.push(route)
+      }
+    }        
   }
 
   return (

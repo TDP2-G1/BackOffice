@@ -64,7 +64,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Inicia sesión en GetFluent
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -73,8 +73,9 @@ function SignIn(props) {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
+            inputProps={{ maxLength: 100 }}
             autoComplete="email"
             onChange={changeHandler}
             autoFocus
@@ -84,6 +85,7 @@ function SignIn(props) {
             margin="normal"
             required
             fullWidth
+            inputProps={{ maxLength: 100 }}
             name="password"
             label="Password"
             type="password"
@@ -101,16 +103,17 @@ function SignIn(props) {
             color="primary"
             className={classes.submit}
             onClick={submitHandler}
+            disabled={props.value && (props.value.email && props.value.password) ? null : true}
           >
-            Sign In
+            Entrar
           </Button>
-          <Grid container>            
+          {/* <Grid container>            
             <Grid item>
               <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
       <Box mt={8}>
@@ -128,8 +131,6 @@ export class Login extends Component {
             formData: {
                 email: '',
                 password: '',
-                google_token: '',
-                user_type: 'admin',
             },
             errorMessage: ''
         };
@@ -141,7 +142,7 @@ export class Login extends Component {
 
     render() {
         return (
-            <SignIn handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange} errorMessage={this.state.errorMessage}></SignIn>
+            <SignIn handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange} errorMessage={this.state.errorMessage} value={this.state.formData}></SignIn>
         )
     }
 
@@ -154,10 +155,11 @@ export class Login extends Component {
 
     handleApiResponse(response) {
         if (response.hasError()) {
-            this.setState({errorMessage: response.errorMessages()});
+            //this.setState({errorMessage: response.errorMessages()});
+            this.setState({errorMessage: 'Email o contraseña inválidos'});
         } else {
             app.loginUser(response.content().token);
-            this.props.history.push(app.routes().home);
+            this.props.history.push(app.routes().userlist);
         }
     }
 

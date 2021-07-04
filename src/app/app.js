@@ -18,8 +18,8 @@ class App {
 
     routes() {
         return {
-            //TODO: login: '/'
-            userlist: '/',            
+            login: '/',
+            userlist: '/users',
         }
     }
 
