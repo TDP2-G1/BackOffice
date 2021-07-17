@@ -218,7 +218,7 @@ class UserList extends React.Component {
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Nombre y Apellido</TableCell>
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Foto</TableCell>
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Intereses</TableCell>
-              <TableCell align="center" style={{ fontWeight: 'bold' }}>Denuncias</TableCell>
+              <TableCell align="center" style={{ fontWeight: 'bold' }}>Denuncias Abiertas</TableCell>
               {/* <TableCell align="center" style={{ fontWeight: 'bold' }}>Perfil</TableCell> */}
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Acceso</TableCell>
             </TableRow>
