@@ -17,10 +17,16 @@ import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Receipt, People, Computer, Report, Money, MeetingRoom } from '@material-ui/icons';
+import { Receipt, People, Computer, Report, Money, MeetingRoom, Dashboard } from '@material-ui/icons';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 
 const categories = [
+  {
+    id: 'Control',
+    children: [      
+      { id: 'Dashboard', icon: <Dashboard />, route: '/dashboard' },
+    ],
+  },
   {
     id: 'Usuarios',
     children: [      

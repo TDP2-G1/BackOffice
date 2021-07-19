@@ -20,6 +20,7 @@ class App {
         return {
             login: '/',
             userlist: '/users',
+            dashboard: '/dashboard'
         }
     }
 
