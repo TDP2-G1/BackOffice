@@ -202,7 +202,7 @@ class UserList extends React.Component {
 
   marcarRevisada = async (id, newStatus, userId) => {
     let token = ''
-    let response = await put(`http://tdp2-tp1-users-service.herokuapp.com/report/${id}`, {is_pending: newStatus}, token)
+    let response = await put(`https://tdp2-tp1-users-service.herokuapp.com/report/${id}`, {is_pending: newStatus}, token)
 
     let userToUpdate = this.state.user_list.filter(x => x.id_user === userId)[0]
     let list = [...this.state.user_list]
