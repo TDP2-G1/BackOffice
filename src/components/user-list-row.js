@@ -6,7 +6,7 @@ import { Cancel, CheckCircle, Person } from '@material-ui/icons';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-const UserListRow = ({ user, blockStatusHandler }) => {
+const UserListRow = ({ user, blockStatusHandler, marcarRevisadaHandler }) => {
 
   const [open, setOpen] = React.useState(false);
   const [reportsData, setReportsData] = useState([])
@@ -37,14 +37,15 @@ const UserListRow = ({ user, blockStatusHandler }) => {
 
   const getReportDataForUser = async () => {
     const dataResult = await getReportData(user.id_user)
-    let orderedData = dataResult
+    let orderedData = dataResult ?? []
     orderedData.sort((a, b) => (a.date < b.date) ? 1 : -1)
     setReportsData(orderedData)
     setOpen(!open)
   }
 
-  const marcarComoRevisada = (id) =>{      
+  const marcarComoRevisada = (id, estado, idUser) =>{      
       setReportsData(reportsData.map(r => r.id_report === id ? {...r, is_pending: !r.is_pending}: r))
+      marcarRevisadaHandler(id, !estado, idUser)
   }
 
   return (
@@ -58,7 +59,7 @@ const UserListRow = ({ user, blockStatusHandler }) => {
         <TableCell align="center" style={{ fontWeight: 'bold' }}>{user.first_name + ' ' + user.last_name}</TableCell>
         <TableCell align="center" ><Avatar alt={user.first_name} src={user.pictures[0].url} style={{ width: '80px', height: '80px', margin: 'auto' }} /></TableCell>
         <TableCell align="center" style={{ maxWidth: '120px' }}>{user.topics_descriptions}</TableCell>
-        <TableCell align="center">{user.reported_by.length}</TableCell>
+        <TableCell align="center">{user.abiertas}</TableCell>
         {/* <TableCell align="center"><Person></Person></TableCell> */}
         <TableCell align="center">
           <IconButton title={user.is_disabled ? 'Restaurar Acceso a GetFluent' : 'Inhabilitar Acceso a GetFluent'} aria-label={user.is_disabled ? 'Restaurar Acceso a GetFluent' : 'Inhabilitar Acceso a GetFluent'} style={{ marginBottom: '1.2rem' }} type="button" style={{ color: blockColor }} onClick={() => blockStatusHandler(user.id_user, !user.is_disabled)} component="span">
@@ -96,7 +97,7 @@ const UserListRow = ({ user, blockStatusHandler }) => {
                         <Checkbox
                           checked={!data.is_pending}
                           color="primary"
-                          onChange={()=> marcarComoRevisada(data.id_report)}
+                          onChange={()=> marcarComoRevisada(data.id_report, data.is_pending, user.id_user)}
                           inputProps={{ 'aria-label': 'secondary checkbox' }}
                         />
                       </TableCell>
