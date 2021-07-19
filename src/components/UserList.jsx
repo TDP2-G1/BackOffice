@@ -128,6 +128,7 @@ class UserList extends React.Component {
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.toggleWithAccessFilter = this.toggleWithAccessFilter.bind(this);
     this.toggleWithoutAccessFilter = this.toggleWithoutAccessFilter.bind(this);
+    this.marcarRevisada = this.marcarRevisada.bind(this)
   }
 
  handleChangePage = (event, newPage) => {
@@ -151,8 +152,8 @@ class UserList extends React.Component {
     if (response.status == 200) {
       let json = await response.json();
       let myList = json
-      myList.sort((a, b) => (a.reported_by.length < b.reported_by.length) ? 1 : -1)
-      this.setState({ user_list: myList });
+      myList.sort((a, b) => (a.reported_by_with_status.filter(f => f.is_pending).length < b.reported_by_with_status.filter(f => f.is_pending).length) ? 1 : -1)
+      this.setState({ user_list: myList.map(l => ({...l, abiertas: l.reported_by_with_status.filter(f => f.is_pending).length})) });
     }
   }  
 
@@ -199,6 +200,24 @@ class UserList extends React.Component {
     return passTopicCheck && passAccessCheck
   }
 
+  marcarRevisada = async (id, newStatus, userId) => {
+    let token = ''
+    let response = await put(`http://tdp2-tp1-users-service.herokuapp.com/report/${id}`, {is_pending: newStatus}, token)
+
+    let userToUpdate = this.state.user_list.filter(x => x.id_user === userId)[0]
+    let list = [...this.state.user_list]
+    list.forEach(function (x, index) {
+      if (x.id_user === userToUpdate.id_user) {
+        if(newStatus){
+          x.abiertas = x.abiertas + 1
+        }else{
+          x.abiertas = x.abiertas - 1
+        }         
+      }
+    });
+    this.setState({ ...this.state, user_list: list })
+  }
+
   render() {
 
     if (this.state.loading) {
@@ -218,7 +237,7 @@ class UserList extends React.Component {
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Nombre y Apellido</TableCell>
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Foto</TableCell>
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Intereses</TableCell>
-              <TableCell align="center" style={{ fontWeight: 'bold' }}>Denuncias</TableCell>
+              <TableCell align="center" style={{ fontWeight: 'bold' }}>Denuncias Pendientes</TableCell>
               {/* <TableCell align="center" style={{ fontWeight: 'bold' }}>Perfil</TableCell> */}
               <TableCell align="center" style={{ fontWeight: 'bold' }}>Acceso</TableCell>
             </TableRow>
@@ -227,7 +246,7 @@ class UserList extends React.Component {
             {(this.state.rowsPerPage > 0
             ? this.state.user_list.filter( l => this.showOnList(l)).slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
             : this.state.user_list
-          ).map((u) =>  <UserListRow user={u} blockStatusHandler={this.setBlockStatus} key={u.id_user + 'user_list_row'}/>)}
+          ).map((u) =>  <UserListRow user={u} blockStatusHandler={this.setBlockStatus} key={u.id_user + 'user_list_row'} marcarRevisadaHandler={this.marcarRevisada}/>)}
            {/*  {this.state.user_list.filter((e,index) => index >= this.state.page * this.state.rowsPerPage && index < (this.state.page + 1) * this.state.rowsPerPage).map((u) =>  <UserListRow user={u} blockStatusHandler={this.setBlockStatus} key={u.id_user + 'user_list_row'}/>)} */}
           </TableBody>
           <TableFooter>
